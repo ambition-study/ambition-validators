@@ -114,6 +114,30 @@ class TestPkPdCrfFormValidator(TestCase):
         self.assertIn(
             'fluconazole_dose_reason_missed', form_validator._errors)
 
+    def test_full_ambisome_dose_given_yes(self):
+        cleaned_data = {'ambisome_ended_datetime': None,
+                        'full_ambisome_dose_given': YES, }
+        form_validator = PkPdCrfFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('ambisome_ended_datetime', form_validator._errors)
+
+    def test_full_ambisome_dose_given_no(self):
+        cleaned_data = {'ambisome_ended_datetime': get_utcnow(),
+                        'full_ambisome_dose_given': NO, }
+        form_validator = PkPdCrfFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('ambisome_ended_datetime', form_validator._errors)
+
+    def test_full_ambisome_dose_given_none(self):
+        cleaned_data = {'ambisome_ended_datetime': get_utcnow(),
+                        'full_ambisome_dose_given': None, }
+        form_validator = PkPdCrfFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('ambisome_ended_datetime', form_validator._errors)
+
     def test_blood_sample_missed_no_reason_missed_none(self):
         cleaned_data = {'blood_sample_missed': YES,
                         'blood_sample_reason_missed': None}

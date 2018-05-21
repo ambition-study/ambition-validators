@@ -30,6 +30,11 @@ class PkPdCrfFormValidator(FormValidator):
 
         self.required_if(
             YES,
+            field='full_ambisome_dose_given',
+            field_required='ambisome_ended_datetime')
+
+        self.required_if(
+            YES,
             field='blood_sample_missed',
             field_required='blood_sample_reason_missed',
             inverse=False)
