@@ -11,8 +11,8 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='ambition-validators',
-    version='0.1.1',
-    author=u'lkepaletswe,erikvw@gmail.com',
+    version='0.1.2',
+    author=u'leslie.kep@gmail.com,erikvw@gmail.com',
     author_email='',
     packages=find_packages(),
     include_package_data=True,
