@@ -7,7 +7,6 @@ from edc_constants.constants import YES, NO
 from ..form_validators import FollowUpFormValidator
 
 
-@tag('1')
 class TestFollowUpFormValidator(TestCase):
 
     def test_rifampicin_started_yes_require_rifampicin_start_date(self):
@@ -46,6 +45,20 @@ class TestFollowUpFormValidator(TestCase):
         form_validator = FollowUpFormValidator(cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('fluconazole_dose_other', form_validator._errors)
+
+    def test_blood_transfusions_blood_yes_transfusions_units(self):
+        cleaned_data = {'blood_transfusions': YES,
+                        'blood_transfusions_units': None}
+        form_validator = FollowUpFormValidator(cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('blood_transfusions_units', form_validator._errors)
+
+    def test_blood_transfusions_blood_no_transfusions_units(self):
+        cleaned_data = {'blood_transfusions': NO,
+                        'blood_transfusions_units': 30}
+        form_validator = FollowUpFormValidator(cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('blood_transfusions_units', form_validator._errors)
 
 #     def test_care_before_hospital_yes(self):
 #         cleaned_data = {'care_before_hospital': YES,

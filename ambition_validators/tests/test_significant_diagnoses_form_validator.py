@@ -2,12 +2,13 @@ from ambition_visit_schedule import DAY1
 from django import forms
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from edc_appointment.models import Appointment
 from edc_base import get_utcnow
 from edc_constants.constants import YES, OTHER, NO
 from edc_form_validators import REQUIRED_ERROR
 
 from ..form_validators import SignificantDiagnosesFormValidator
-from .models import SubjectVisit, TestModel, Appointment
+from .models import SubjectVisit, TestModel
 
 
 class TestSignificantDiagnosesFormValidator(TestCase):

@@ -13,6 +13,11 @@ class Week2FormValidator(FormValidator):
 
         self.required_if(
             YES,
+            field='discharged',
+            field_required='research_discharge_date')
+
+        self.required_if(
+            YES,
             field='died',
             field_required='death_date_time')
 

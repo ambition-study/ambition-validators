@@ -21,3 +21,8 @@ class SubjectScreeningFormValidator(FormValidator):
 
         self.not_applicable_if(MALE, field='gender',
                                field_applicable='breast_feeding')
+
+        self.required_if(
+            YES,
+            field='unsuitable_for_study',
+            field_required='reasons_unsuitable')

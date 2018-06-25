@@ -3,13 +3,15 @@ from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from django.test.utils import override_settings
+from edc_appointment.models import Appointment
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, POS, NOT_APPLICABLE
 from edc_reportable import GRAMS_PER_DECILITER, IU_LITER, TEN_X_9_PER_LITER
-from edc_reportable import MICROMOLES_PER_LITER, MILLIGRAMS_PER_DECILITER, MILLIMOLES_PER_LITER
+from edc_reportable import MICROMOLES_PER_LITER, MILLIGRAMS_PER_DECILITER
+from edc_reportable import MILLIMOLES_PER_LITER
 
 from ..form_validators import BloodResultFormValidator
-from .models import SubjectVisit, SubjectConsent, BloodResult, Appointment
+from .models import SubjectVisit, SubjectConsent, BloodResult
 
 
 class TestBloodResultFormValidator(TestCase):
@@ -28,7 +30,6 @@ class TestBloodResultFormValidator(TestCase):
             appointment=appointment)
 
         self.cleaned_data = {
-            'subject_visit': self.subject_visit,
             'haemoglobin': 15,
             'haemoglobin_units': GRAMS_PER_DECILITER,
             'haemoglobin_abnormal': NO,
@@ -381,6 +382,21 @@ class TestBloodResultFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('crag_t1_result', form_validator._errors)
 
+    @override_settings(SITE_ID=40)
+    def test_crag_blantyre_crag_t1_result_none(self):
+        self.cleaned_data.update(
+            absolute_neutrophil=4,
+            are_results_normal=YES,
+            bios_crag=YES,
+            crag_control_result=POS,
+            crag_t1_result=NOT_APPLICABLE
+        )
+        form_validator = BloodResultFormValidator(
+            cleaned_data=self.cleaned_data,
+            instance=BloodResult())
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('crag_t1_result', form_validator._errors)
+
     def test_crag_country_botswana_crag_t2_result_none(self):
         self.cleaned_data.update(
             absolute_neutrophil=4,
@@ -395,7 +411,7 @@ class TestBloodResultFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('crag_t2_result', form_validator._errors)
 
-    @override_settings(COUNTRY='zimbabwe')
+    @override_settings(SITE_ID=20)
     def test_crag_country_zimbabwe_crag_control_result_yes(self):
         self.cleaned_data.update(
             absolute_neutrophil=4,
@@ -408,7 +424,7 @@ class TestBloodResultFormValidator(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('bios_crag', form_validator._errors)
 
-    @override_settings(COUNTRY='zimbabwe')
+    @override_settings(SITE_ID=20)
     def test_crag_country_zimbabwe_crag_control_result_no(self):
         self.cleaned_data.update(
             absolute_neutrophil=4,

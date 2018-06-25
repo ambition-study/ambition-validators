@@ -2,12 +2,13 @@ from ambition_visit_schedule import DAY1
 from django import forms
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from edc_appointment.models import Appointment
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, OTHER
 
 from ..form_validators import Week2FormValidator, SignificantDiagnosesFormValidator
 from ..form_validators import FluconazoleMissedDosesFormValidator
-from .models import SubjectVisit, TestModel, Appointment
+from .models import SubjectVisit, TestModel
 
 
 class TestWeek2Form(TestCase):
@@ -19,7 +20,24 @@ class TestWeek2Form(TestCase):
         self.assertRaises(ValidationError, week2.validate)
 
         cleaned_data = {'discharged': YES,
-                        'discharge_date': get_utcnow()}
+                        'discharge_date': get_utcnow(),
+                        'research_discharge_date': get_utcnow()}
+        week2 = Week2FormValidator(cleaned_data=cleaned_data)
+
+        try:
+            week2.validate()
+        except forms.ValidationError as e:
+            self.fail(f'ValidationError unexpectedly raised. Got{e}')
+
+    def test_discharged_yes_require_research_discharge_date(self):
+        cleaned_data = {'discharged': YES,
+                        'research_discharge_date': None}
+        week2 = Week2FormValidator(cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, week2.validate)
+
+        cleaned_data = {'discharged': YES,
+                        'discharge_date': get_utcnow(),
+                        'research_discharge_date': get_utcnow()}
         week2 = Week2FormValidator(cleaned_data=cleaned_data)
 
         try:

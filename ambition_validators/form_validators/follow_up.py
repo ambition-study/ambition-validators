@@ -15,3 +15,8 @@ class FollowUpFormValidator(FormValidator):
             YES,
             field='rifampicin_started',
             field_required='rifampicin_start_date')
+
+        self.required_if(
+            YES,
+            field='blood_transfusions',
+            field_required='blood_transfusions_units')

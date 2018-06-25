@@ -68,8 +68,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             field='results_reportable', responses=[GRADE3, GRADE4],
             suffix='_reportable', word='reportable')
 
-        # TODO: Use site code to validate not country, Gaborone & Blantyre
-        if (settings.COUNTRY not in ['botswana', 'malawi']
+        if (settings.SITE_ID not in [10, 40]
                 and self.cleaned_data.get('bios_crag') != NOT_APPLICABLE):
             raise forms.ValidationError(
                 {f'bios_crag': 'This field is not applicable'})
@@ -112,6 +111,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             grade = grp.get_grade(value, **opts)
         except NotEvaluated as e:
             raise forms.ValidationError({field: str(e)})
+
         if grade and grade.grade and reportable != str(grade.grade):
             if reportable != ALREADY_REPORTED:
                 raise forms.ValidationError({
@@ -132,6 +132,7 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             elif normal and not grade and abnormal == YES:
                 raise forms.ValidationError({
                     f'{field}_abnormal': 'Invalid. Result is not abnormal'})
+
         if abnormal == YES and reportable == NOT_APPLICABLE:
             raise forms.ValidationError(
                 {f'{field}_reportable': 'This field is applicable if result is abnormal'})

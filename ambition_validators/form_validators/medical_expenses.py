@@ -37,11 +37,18 @@ class MedicalExpensesFormValidator(FormValidator):
             field='loss_of_earnings',
             field_required='earnings_lost_amount')
 
-        condition = (self.cleaned_data.get('form_of_transport') not in
-                     [NOT_APPLICABLE, 'foot', 'bicycle', 'ambulance'])
-        self.required_if_true(
-            condition=condition,
-            field_required='transport_fare')
+        if self.cleaned_data.get('form_of_transport'):
+            if ((self.cleaned_data.get('form_of_transport') not in [
+                NOT_APPLICABLE, 'foot', 'bicycle', 'ambulance'])
+                    and self.cleaned_data.get('transport_fare') is None):
+                raise forms.ValidationError({
+                    'transport_fare': 'This field is required.'})
+
+            if ((self.cleaned_data.get('form_of_transport') in [
+                NOT_APPLICABLE, 'foot', 'bicycle', 'ambulance'])
+                    and self.cleaned_data.get('transport_fare') is not None):
+                raise forms.ValidationError({
+                    'transport_fare': 'This field is not required.'})
 
         self.required_if_true(
             condition=self.cleaned_data.get(

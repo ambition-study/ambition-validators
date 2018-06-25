@@ -1,9 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.test import TestCase
-from edc_base.model_mixins import BaseUuidModel
-from edc_base.utils import get_utcnow
-from edc_constants.choices import YES_NO
 from edc_constants.constants import NO, OTHER, YES
 
 from .. import PreviousOpportunisticInfectionFormValidator

@@ -15,15 +15,6 @@ class ListModel(ListModelMixin, BaseUuidModel):
     pass
 
 
-# class Appointment(BaseUuidModel):
-#
-#     visit_code_sequence = models.IntegerField(
-#         verbose_name=('Sequence'),
-#         default=0,
-#         null=True,
-#         blank=True)
-
-
 class RequiresConsentModelMixin(models.Model):
 
     class Meta:
@@ -40,15 +31,6 @@ class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
     dob = models.DateField()
 
 
-class Appointment(BaseUuidModel):
-
-    subject_identifier = models.CharField(max_length=25)
-
-    appt_datetime = models.DateTimeField(default=get_utcnow)
-
-    visit_code = models.CharField(max_length=25)
-
-
 class SubjectVisit(RequiresConsentModelMixin, BaseUuidModel):
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
@@ -56,6 +38,8 @@ class SubjectVisit(RequiresConsentModelMixin, BaseUuidModel):
     subject_identifier = models.CharField(max_length=25)
 
     visit_code = models.CharField(max_length=25)
+
+    visit_code_sequence = models.IntegerField(max_length=25, default=0)
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 

@@ -1,14 +1,11 @@
-from django import forms
-from django.test import TestCase, tag
 from django.core.exceptions import ValidationError
-
+from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 from edc_constants.constants import MALE, YES, NOT_APPLICABLE, NO, FEMALE
 
 from ..form_validators import SubjectScreeningFormValidator
 
 
-@tag('sc')
 class TestSubjectScreeningFormValidator(TestCase):
 
     def test_gender(self):

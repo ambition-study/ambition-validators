@@ -2,13 +2,14 @@ from ambition_visit_schedule import DAY1
 from django import forms
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from edc_appointment.models import Appointment
 from edc_base import get_utcnow
 from edc_constants.constants import YES, NO, POS, NOT_APPLICABLE, OTHER
 from edc_registration.models import RegisteredSubject
 
 from ..constants import KLEBSIELLA_SPP, BACTERIA, NO_GROWTH, CRYPTOCOCCUS_NEOFORMANS
 from ..form_validators import MicrobiologyFormValidator
-from .models import SubjectVisit, Appointment
+from .models import SubjectVisit
 
 
 class TestMicrobiologyFormValidator(TestCase):
