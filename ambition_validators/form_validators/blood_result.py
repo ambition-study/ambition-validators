@@ -1,6 +1,5 @@
 from ambition_labs.panels import cd4_panel, viral_load_panel, fbc_panel
 from ambition_labs.panels import chemistry_panel, chemistry_alt_panel
-from ambition_subject.constants import ALREADY_REPORTED
 from django.apps import apps as django_apps
 from django.conf import settings
 from django.forms import forms
@@ -8,6 +7,8 @@ from edc_constants.constants import NO, YES, NOT_APPLICABLE
 from edc_form_validators import FormValidator
 from edc_lab import CrfRequisitionFormValidatorMixin
 from edc_reportable import site_reportables, NotEvaluated, GRADE3, GRADE4
+
+from ..constants import DAY1, ALREADY_REPORTED
 
 
 class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
@@ -68,25 +69,26 @@ class BloodResultFormValidator(CrfRequisitionFormValidatorMixin, FormValidator):
             field='results_reportable', responses=[GRADE3, GRADE4],
             suffix='_reportable', word='reportable')
 
-        if (settings.SITE_ID not in [10, 40]
-                and self.cleaned_data.get('bios_crag') != NOT_APPLICABLE):
-            raise forms.ValidationError(
-                {f'bios_crag': 'This field is not applicable'})
+        if self.cleaned_data.get('subject_visit').visit_code == DAY1:
+            if (settings.SITE_ID not in [10, 40]
+                    and self.cleaned_data.get('bios_crag') != NOT_APPLICABLE):
+                raise forms.ValidationError(
+                    {f'bios_crag': 'This field is not applicable'})
 
-        self.applicable_if(
-            YES,
-            field='bios_crag',
-            field_applicable='crag_control_result')
+            self.applicable_if(
+                YES,
+                field='bios_crag',
+                field_applicable='crag_control_result')
 
-        self.applicable_if(
-            YES,
-            field='bios_crag',
-            field_applicable='crag_t1_result')
+            self.applicable_if(
+                YES,
+                field='bios_crag',
+                field_applicable='crag_t1_result')
 
-        self.applicable_if(
-            YES,
-            field='bios_crag',
-            field_applicable='crag_t2_result')
+            self.applicable_if(
+                YES,
+                field='bios_crag',
+                field_applicable='crag_t2_result')
 
     def evaluate_result(self, field, value, grp, **opts):
         """Evaluate a single result value.
