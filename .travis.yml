@@ -10,8 +10,6 @@ install:
 - pip install --upgrade pip
 - pip install flake8
 - pip install coveralls
-- pip install mysqlclient
-- pip install -e .
 - pip install -q -r requirements.txt
 before_script:
 - flake8 ambition_validators
@@ -20,6 +18,3 @@ script:
 - coverage run --source=ambition_validators manage.py test
 after_success:
 - coveralls
-notifications:
-  slack:
-    secure: qqywQ/vE1erv+G+2KWmDnDQ3os4MwSyEkLbrTmHxbIyrNUS1DKHvR0TvtldG/Xn+KmDIJ9dNpK6LeucAsACd0IFcePwRnKu9HzJnxrsLubXP6x/sNAg96vX0ZnGhkqY2xvXQDEMLuts96w8kBfb0k5Iyv1FWga0YB9PflwymTnoCSH4YuYmE8nIBRDa/yY9/fiibJ1ngc+vAfqik/6u/Xk7N78BrJpsPR77r6xBswAL+FtUyOjcC+9tiHFvRAkW3CgTWc+e0NVLkbL0CDLNL1giZkHgSBKtx+DZQzxmXPs1C/nzBKQacjQmQabmzezeIjTtSTUbdUVO+4+P2QQOgNLn5nI66HQcfYLld0J4vamgKlWo8nqIMe1Nwt2TuVEVXGCT/e5LA+tzEanW8ZyOTZYJSYvRCnHJaBXkd+BQQJCGbwlI2Z9siMYZYAQaOxLvJAcvU/rQyRSWmVKwvRLmtUe84j6Man1b7XQPJMjO17NGTG2hM/m29dYtoNmZXOEuPEaUQecXCqhNGsJvrVM9QfKbZf1XRv2b8CJ3z3G1kg5w4FxtVDAcHOP9LL7NWU/vtGuTOLqjwBFdeWRzkI6WOJDA78Lsg991z6WbF8JDIN3LET298FvtRzNwQJJ8FMAuC7mNb8x5oCRbE+xBT5ART9wR6vFIq9J39mhvUe2EDPVA=
